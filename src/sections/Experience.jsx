@@ -81,7 +81,7 @@ const Experience = () => {
                   {index === 0 && (
                     <div className="card-border rounded-xl p-5 mb-5 flex items-center justify-center">
                       <img 
-                        src="/src/components/assets/Profile .jpg" 
+                        src="/images/Profile.jpg" 
                         alt="Profile" 
                         className="rounded-xl w-full h-auto object-cover"
                       />
