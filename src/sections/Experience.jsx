@@ -74,12 +74,46 @@ const Experience = () => {
         />
         <div className="mt-32 relative">
           <div className="relative z-50 xl:space-y-32 space-y-10">
-            {expCards.map((card) => (
+            {expCards.map((card, index) => (
               <div key={card.title} className="exp-card-wrapper">
                 <div className="xl:w-2/6">
-                  <div className="rounded-xl p-10 mb-5" style={{ backgroundColor: '#2e2e2e' }}>
-                    {/* Simple background card */}
-                  </div>
+                  {/* Profile Picture Card - First card only */}
+                  {index === 0 && (
+                    <div className="card-border rounded-xl p-5 mb-5 flex items-center justify-center">
+                      <img 
+                        src="/src/components/assets/Profile .jpg" 
+                        alt="Profile" 
+                        className="rounded-xl w-full h-auto object-cover"
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Personal Info Card - First card only */}
+                  {index === 0 && (
+                    <div className="card-border rounded-xl p-8 mb-5">
+                      <h2 className="font-semibold text-2xl mb-4 text-white">About Me</h2>
+                      <div className="space-y-3 text-white-50">
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium text-white">Age:</span> 37 years old
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium text-white">Location:</span> South Africa (Johannesburg South)
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium text-white">Marital Status:</span> Married
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium text-white">Dependants:</span> 1 
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium text-white">Cell:</span> +27 738310288
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium text-white">Role:</span> Intermediate Frontend Developer
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="xl:w-4/6">
                   <div className="flex items-start">
