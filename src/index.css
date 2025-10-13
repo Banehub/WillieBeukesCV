@@ -470,3 +470,11 @@ section {
 .card:hover::before {
   opacity: 1;
 }
+
+/* Modal and Projects Accordion Styles */
+.landing-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}

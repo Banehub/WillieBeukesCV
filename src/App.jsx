@@ -8,6 +8,7 @@ import ShowcaseSection from "./sections/ShowcaseSection";
 import LogoShowcase from "./sections/LogoShowcase";
 import FeatureCards from "./sections/FeatureCards";
 import Navbar from "./components/NavBar";
+import ProjectsAccordion from "./sections/ProjectsAccordion";
 
 const App = () => (
   <>
@@ -18,6 +19,7 @@ const App = () => (
     <FeatureCards />
     <Experience />
     <TechStack />
+    <ProjectsAccordion />
     {/* <Testimonials /> */}
     <Contact />
     <Footer />

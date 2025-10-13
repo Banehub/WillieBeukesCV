@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NatureFlight - Willie Beukes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+        background: #000;
+        color: white;
+      }
+
+      .landing-page {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      /* Video Background */
+      .video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7));
+        z-index: 1;
+      }
+
+      .overlay::after {
+        content: '';
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 300px;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        z-index: 100;
+        animation: slideDown 0.8s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .navbar-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .navbar-brand h2 {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .navbar-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.3s;
+      }
+
+      .nav-link:hover {
+        color: #60a5fa;
+      }
+
+      .navbar-actions {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn-login, .btn-register {
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+      }
+
+      .btn-login {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+      }
+
+      .btn-login:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-register {
+        background: #2e2e2e;
+        color: white;
+      }
+
+      .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+      }
+
+      /* Hero Section */
+      .hero-section-wrapper {
+        position: relative;
+        min-height: 100vh;
+      }
+
+      .hero-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        text-align: center;
+        padding: 2rem;
+        padding-top: 100px;
+        position: relative;
+      }
+
+      .hero-content h1 {
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1rem;
+        animation: fadeInUp 1s ease-out 0.3s both;
+      }
+
+      .hero-content p {
+        font-size: clamp(1.1rem, 3vw, 1.5rem);
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 3rem;
+        animation: fadeInUp 1s ease-out 0.5s both;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+        animation: fadeInUp 1s ease-out 0.7s both;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 1rem 2.5rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 600;
+      }
+
+      .btn-primary {
+        background: white;
+        color: #000;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.4);
+      }
+
+      /* About Section */
+      .about-section {
+        position: relative;
+        z-index: 2;
+        padding: 6rem 2rem;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+      }
+
+      .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .about-text h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .about-text p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 2rem;
+      }
+
+      .about-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .stat h3 {
+        font-size: 2.5rem;
+        color: white;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      /* Gallery Section */
+      .gallery-section {
+        position: relative;
+        z-index: 2;
+        padding: 6rem 2rem;
+        background: rgba(10, 10, 10, 0.9);
+      }
+
+      .gallery-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .gallery-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+
+      .gallery-header h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .gallery-header p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .gallery-item {
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        background: #2e2e2e;
+        transition: transform 0.3s;
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-5px);
+      }
+
+      .gallery-image {
+        position: relative;
+        height: 300px;
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .placeholder-image {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .gallery-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1.5rem;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      }
+
+      .gallery-overlay h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .gallery-overlay p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .gallery-overlay span {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* Quote Section */
+      .quote-section {
+        position: relative;
+        z-index: 2;
+        padding: 8rem 2rem;
+        background: rgba(0, 0, 0, 0.85);
+        text-align: center;
+      }
+
+      .quote-content blockquote {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        font-style: italic;
+        color: white;
+        margin-bottom: 1.5rem;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .quote-content cite {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.1rem;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        position: relative;
+        z-index: 2;
+        padding: 6rem 2rem;
+        background: rgba(15, 15, 15, 0.9);
+      }
+
+      .cta-container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .cta-content h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .cta-content > p {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 3rem;
+      }
+
+      .cta-form {
+        margin-bottom: 2rem;
+      }
+
+      .email-input-group {
+        display: flex;
+        gap: 1rem;
+        max-width: 500px;
+        margin: 0 auto 1rem;
+      }
+
+      .email-input {
+        flex: 1;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 1rem;
+      }
+
+      .cta-button {
+        padding: 1rem 2rem;
+        background: white;
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+      }
+
+      .form-note {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+      }
+
+      .cta-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 2px solid white;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+      }
+
+      /* Footer */
+      .footer {
+        position: relative;
+        z-index: 2;
+        background: #000;
+        padding: 3rem 2rem 1.5rem;
+      }
+
+      .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .footer-brand {
+        flex: 1;
+      }
+
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .footer-logo span {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .footer-brand p {
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 300px;
+      }
+
+      .footer-social {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: all 0.3s;
+      }
+
+      .social-link:hover {
+        background: #2e2e2e;
+        transform: translateY(-2px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+      }
+
+      .footer-bottom p {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.9rem;
+      }
+
+      /* Chat Widget */
+      .chat-widget {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1000;
+      }
+
+      .chat-toggle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #2e2e2e;
+        border: none;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .chat-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+      }
+
+      .chat-container {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 350px;
+        height: 500px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .chat-container.dark {
+        background: #1a1a1a;
+        color: white;
+      }
+
+      .chat-header {
+        padding: 1.5rem;
+        background: #2e2e2e;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chat-header h3 {
+        font-size: 1.1rem;
+      }
+
+      .header-controls {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .theme-toggle, .close-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close-btn {
+        font-size: 1.5rem;
+        line-height: 1;
+      }
+
+      .chat-body {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+      }
+
+      .chat-message {
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+      }
+
+      .bot-message {
+        background: #f0f0f0;
+        align-self: flex-start;
+      }
+
+      .dark .bot-message {
+        background: #2a2a2a;
+      }
+
+      .chat-input-container {
+        padding: 1rem;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .dark .chat-input-container {
+        border-top-color: #333;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+      }
+
+      .dark .chat-input {
+        background: #2a2a2a;
+        border-color: #444;
+        color: white;
+      }
+
+      .send-btn {
+        padding: 0.75rem 1rem;
+        background: #2e2e2e;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .navbar-links {
+          display: none;
+        }
+
+        .navbar-actions {
+          gap: 0.5rem;
+        }
+
+        .btn-login, .btn-register {
+          padding: 0.4rem 1rem;
+          font-size: 0.85rem;
+        }
+
+        .navbar {
+          padding: 1rem;
+        }
+
+        .hero-section {
+          padding: 1rem;
+          padding-top: 80px;
+        }
+
+        .about-section, .gallery-section, .quote-section, .cta-section, .footer {
+          padding: 3rem 1rem;
+        }
+
+        .about-content {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .about-stats {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .email-input-group {
+          flex-direction: column;
+        }
+
+        .email-input, .cta-button {
+          width: 100%;
+        }
+
+        .chat-container {
+          width: calc(100vw - 2rem);
+          right: -1rem;
+          max-height: 400px;
+        }
+
+        .chat-widget {
+          bottom: 1rem;
+          right: 1rem;
+        }
+
+        .chat-toggle {
+          width: 50px;
+          height: 50px;
+        }
+
+        .footer-content {
+          flex-direction: column;
+          gap: 2rem;
+          text-align: center;
+        }
+
+        .footer-brand p {
+          max-width: 100%;
+        }
+
+        .footer-social {
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="landing-page">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <h2>NatureFlight</h2>
+          </div>
+          
+          <div class="navbar-links">
+            <a href="#" class="nav-link" onclick="window.close(); return false;">Home</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#gallery" class="nav-link">Gallery</a>
+            <a href="#contact" class="nav-link">Contact</a>
+          </div>
+          
+          <div class="navbar-actions">
+            <button class="btn-login">Login</button>
+            <button class="btn-register">Register</button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Hero Section -->
+      <section class="hero-section-wrapper">
+        <video class="video-background" autoplay loop muted playsinline>
+          <source src="/images/NatureFlightBackground.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="overlay"></div>
+        
+        <div class="content">
+          <div class="hero-section">
+            <div class="hero-content">
+              <h1>Where Nature Takes Flight.</h1>
+              <p>Experience the freedom and beauty of the wild, right from your screen.</p>
+              
+              <div class="cta-buttons">
+                <button class="btn btn-primary">Explore More</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="about-section">
+        <div class="about-container">
+          <div class="about-content">
+            <div class="about-text">
+              <h2>Our Mission</h2>
+              <p>
+                Our mission is to capture the harmony of flight — connecting people and nature 
+                through moving imagery and sound. We believe that every wingbeat tells a story 
+                of freedom, grace, and the timeless dance between earth and sky.
+              </p>
+              <div class="about-stats">
+                <div class="stat">
+                  <h3>500+</h3>
+                  <p>Species Documented</p>
+                </div>
+                <div class="stat">
+                  <h3>50+</h3>
+                  <p>Countries Explored</p>
+                </div>
+                <div class="stat">
+                  <h3>1000+</h3>
+                  <p>Hours of Footage</p>
+                </div>
+              </div>
+            </div>
+            <div class="about-visual">
+              <!-- Placeholder for visual -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gallery Section -->
+      <section id="gallery" class="gallery-section">
+        <div class="gallery-container">
+          <div class="gallery-header">
+            <h2>Nature's Gallery</h2>
+            <p>Capturing the essence of flight across the globe</p>
+          </div>
+          
+          <div class="gallery-grid">
+            <div class="gallery-item">
+              <div class="gallery-image">
+                <div class="placeholder-image">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <div class="gallery-overlay">
+                  <h3>Eagle in Flight</h3>
+                  <p>Golden Eagle</p>
+                  <span>Rocky Mountains</span>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image">
+                <div class="placeholder-image">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <div class="gallery-overlay">
+                  <h3>Morning Song</h3>
+                  <p>Toucan</p>
+                  <span>Amazon Rainforest</span>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image">
+                <div class="placeholder-image">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <div class="gallery-overlay">
+                  <h3>Arctic Wanderer</h3>
+                  <p>Arctic Tern</p>
+                  <span>North Pole</span>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image">
+                <div class="placeholder-image">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <div class="gallery-overlay">
+                  <h3>Desert Soarer</h3>
+                  <p>Falcon</p>
+                  <span>Sahara Desert</span>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image">
+                <div class="placeholder-image">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <div class="gallery-overlay">
+                  <h3>Ocean Glider</h3>
+                  <p>Albatross</p>
+                  <span>Pacific Ocean</span>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image">
+                <div class="placeholder-image">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </div>
+                <div class="gallery-overlay">
+                  <h3>Forest Dancer</h3>
+                  <p>Owl</p>
+                  <span>Boreal Forest</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quote Section -->
+      <section class="quote-section">
+        <div class="quote-content">
+          <blockquote>
+            "The closer we look, the more we understand the beauty of every wingbeat."
+          </blockquote>
+          <cite>- NatureFlight Team</cite>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section id="contact" class="cta-section">
+        <div class="cta-container">
+          <div class="cta-content">
+            <h2>Join the Journey</h2>
+            <p>Be part of our mission to capture and share the beauty of nature's flight.</p>
+            
+            <div class="cta-form">
+              <div class="email-input-group">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email address" 
+                  class="email-input"
+                />
+                <button class="cta-button">Subscribe</button>
+              </div>
+              <p class="form-note">Get updates on new documentaries and exclusive content.</p>
+            </div>
+            
+            <div class="cta-actions">
+              <button class="btn btn-primary">Watch the Documentary</button>
+              <button class="btn btn-secondary">Learn More</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-content">
+            <div class="footer-brand">
+              <div class="footer-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span>NatureFlight</span>
+              </div>
+              <p>Capturing the beauty of flight, one wingbeat at a time.</p>
+            </div>
+            
+            <div class="footer-social">
+              <a href="#" class="social-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+              </a>
+              <a href="#" class="social-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                  <rect x="2" y="9" width="4" height="12"/>
+                  <circle cx="4" cy="4" r="2"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <div class="footer-bottom">
+            <p>&copy; 2024 NatureFlight. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Chat Widget -->
+      <div class="chat-widget">
+        <div id="chatContainer" class="chat-container hidden">
+          <div class="chat-header">
+            <h3>Where would you like to go?</h3>
+            <div class="header-controls">
+              <button class="theme-toggle" onclick="toggleTheme()">
+                <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              </button>
+              <button class="close-btn" onclick="toggleChat()">×</button>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="chat-message bot-message">
+              <p>This is for demo purposes</p>
+            </div>
+          </div>
+          <div class="chat-input-container">
+            <input 
+              type="text" 
+              placeholder="Type your message..." 
+              class="chat-input"
+              disabled
+            />
+            <button class="send-btn" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <button class="chat-toggle" onclick="toggleChat()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let isDarkMode = false;
+
+      function toggleChat() {
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.classList.toggle('hidden');
+      }
+
+      function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        const chatContainer = document.getElementById('chatContainer');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        if (isDarkMode) {
+          chatContainer.classList.add('dark');
+          themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+        } else {
+          chatContainer.classList.remove('dark');
+          themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        }
+      }
+    </script>
+  </body>
+</html>
+
