@@ -1,0 +1,129 @@
+.story-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 4rem 2rem; */
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.95) 0%, rgba(30, 15, 0, 0.9) 100%);
+  z-index: 60;
+}
+
+.story-content {
+  max-width: 100%;
+  text-align: center;
+  animation: fadeInUp 1.5s ease-out;
+}
+
+.story-title {
+  font-family: 'Dune Rise', 'Arial Black', sans-serif;
+  font-size: 4rem;
+  font-weight: 900;
+  color: #8b4513;
+  margin-bottom: 4rem;
+  text-shadow: 0 0 20px rgba(139, 69, 19, 0.5);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.story-card {
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #8b4513;
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  animation: cardFloat 3s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.story-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.story-card:hover::before {
+  left: 100%;
+}
+
+.story-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  border-color: #d4af37;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+.story-card h3 {
+  font-family: 'Dune Rise', 'Arial Black', sans-serif;
+  font-size: 1.8rem;
+  color: #d4af37;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.story-card p {
+  font-family: 'Arial', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(139, 69, 19, 0.5);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(139, 69, 19, 0.8), 0 0 40px rgba(139, 69, 19, 0.3);
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .story-title {
+    font-size: 2.5rem;
+  }
+  
+  .story-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .story-card {
+    padding: 1.5rem;
+  }
+}

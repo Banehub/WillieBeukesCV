@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dune - Willie Beukes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+        background: #000;
+      }
+
+      /* Import Dune Rise font from local assets */
+      @font-face {
+        font-family: 'Dune Rise';
+        src: url('/images/Dune_Rise.ttf') format('truetype'),
+             url('/images/Dune_Rise.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      /* Video Background */
+      .video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: -1;
+        animation: fadeInOut 0.5s ease-in-out;
+      }
+
+      /* Smooth fade animation for seamless loop */
+      @keyframes fadeInOut {
+        0% {
+          opacity: 0.95;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Dark Overlay */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        backdrop-filter: blur(0.5px);
+      }
+
+      /* Bottom Shadow */
+      .overlay::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
+        pointer-events: none;
+      }
+
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: transparent;
+        z-index: 1000;
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+      }
+
+      .navbar-content {
+        max-width: 90%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .navbar-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .nav-link {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.8);
+        font-family: 'Arial', sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        border: none;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        transition: left 0.5s ease;
+      }
+
+      .nav-link:hover::before {
+        border: none;
+        left: 100%;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .nav-link:active {
+        transform: translateY(0);
+      }
+
+      /* Hero Section */
+      .hero-section {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        padding-top: 80px;
+        overflow: visible;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero-content {
+        text-align: center;
+        max-width: 1000px;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 10;
+      }
+
+      .dune-title {
+        font-family: 'Dune Rise', 'Arial Black', sans-serif;
+        font-size: 8rem;
+        font-weight: 900;
+        color: white;
+        margin: 0;
+        padding: 0;
+        text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.3);
+        animation: dropDown 2s ease-out forwards;
+        letter-spacing: 0.1em;
+        opacity: 0;
+        z-index: 200;
+        margin-bottom: 2rem;
+      }
+
+      .hero-subtitle {
+        margin-bottom: 2rem;
+        animation: fadeInUp 1.5s ease-out 0.8s both;
+      }
+
+      .subtitle-line {
+        font-family: 'Arial', sans-serif;
+        font-size: 1.4rem;
+        color: #d4af37;
+        margin: 0.5rem 0;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        opacity: 0;
+        animation: slideInLeft 1s ease-out both;
+      }
+
+      .subtitle-line:nth-child(1) {
+        animation-delay: 1.2s;
+      }
+
+      .subtitle-line:nth-child(2) {
+        animation-delay: 1.4s;
+      }
+
+      .subtitle-line:nth-child(3) {
+        animation-delay: 1.6s;
+      }
+
+      .hero-description {
+        margin-bottom: 3rem;
+        animation: fadeInUp 1.5s ease-out 1.8s both;
+      }
+
+      .hero-description p {
+        font-family: 'Arial', sans-serif;
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        animation: fadeInUp 1.5s ease-out 2.2s both;
+      }
+
+      .stat-item {
+        text-align: center;
+        animation: scaleIn 0.8s ease-out both;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .stat-item:nth-child(1) {
+        animation-delay: 2.4s;
+      }
+
+      .stat-item:nth-child(2) {
+        animation-delay: 2.6s;
+      }
+
+      .stat-item:nth-child(3) {
+        animation-delay: 2.8s;
+      }
+
+      .stat-number {
+        display: block;
+        font-family: 'Dune Rise', 'Arial Black', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #d4af37;
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        margin-bottom: 0.5rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .stat-label {
+        display: block;
+        font-family: 'Arial', sans-serif;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      /* About Section */
+      .about-section {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
+        z-index: 50;
+      }
+
+      .about-content {
+        max-width: 800px;
+        text-align: center;
+        animation: fadeInUp 1.5s ease-out;
+        padding: 4rem 2rem;
+      }
+
+      .about-title {
+        font-family: 'Dune Rise', 'Arial Black', sans-serif;
+        font-size: 4rem;
+        font-weight: 900;
+        color: #d4af37;
+        margin-bottom: 3rem;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      .about-text {
+        font-family: 'Arial', sans-serif;
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .about-text p {
+        margin-bottom: 2rem;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+      }
+
+      .about-text p:last-child {
+        margin-bottom: 0;
+        font-style: italic;
+        color: #d4af37;
+      }
+
+      /* Story Section */
+      .story-section {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(45deg, rgba(0, 0, 0, 0.95) 0%, rgba(30, 15, 0, 0.9) 100%);
+        z-index: 60;
+      }
+
+      .story-content {
+        max-width: 100%;
+        text-align: center;
+        animation: fadeInUp 1.5s ease-out;
+        padding: 4rem 2rem;
+      }
+
+      .story-title {
+        font-family: 'Dune Rise', 'Arial Black', sans-serif;
+        font-size: 4rem;
+        font-weight: 900;
+        color: #8b4513;
+        margin-bottom: 4rem;
+        text-shadow: 0 0 20px rgba(139, 69, 19, 0.5);
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      .story-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .story-card {
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid #8b4513;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        animation: cardFloat 3s ease-in-out infinite;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .story-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        transition: left 0.5s ease;
+      }
+
+      .story-card:hover::before {
+        left: 100%;
+      }
+
+      .story-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        border-color: #d4af37;
+        box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+      }
+
+      .story-card h3 {
+        font-family: 'Dune Rise', 'Arial Black', sans-serif;
+        font-size: 1.8rem;
+        color: #d4af37;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+      }
+
+      .story-card p {
+        font-family: 'Arial', sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+      }
+
+      /* Credits Section */
+      .credits-section {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 1) 100%);
+        z-index: 70;
+        overflow: hidden;
+      }
+
+      .credits-content {
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        animation: fadeInUp 2s ease-out;
+        padding: 4rem 2rem;
+      }
+
+      .credits-title {
+        font-family: 'Arial', sans-serif;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 1rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      .creator-name {
+        font-family: 'Dune Rise', 'Arial Black', sans-serif;
+        font-size: 6rem;
+        font-weight: 900;
+        color: #d4af37;
+        margin-bottom: 2rem;
+        text-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+        animation: nameGlow 3s ease-in-out infinite alternate;
+        letter-spacing: 0.1em;
+      }
+
+      .credits-subtitle {
+        font-family: 'Arial', sans-serif;
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-style: italic;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+      }
+
+      .spice-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #d4af37;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #d4af37;
+        animation: floatUp linear infinite;
+      }
+
+      .particle:nth-child(odd) {
+        background: #8b4513;
+        box-shadow: 0 0 10px #8b4513;
+      }
+
+      /* Animations */
+      @keyframes dropDown {
+        0% {
+          top: -200px;
+          opacity: 0;
+          transform: translateY(-100px) scale(0.8);
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          top: 0;
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        to {
+          text-shadow: 0 0 30px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+      }
+
+      @keyframes cardFloat {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      @keyframes nameGlow {
+        from {
+          text-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+        }
+        to {
+          text-shadow: 0 0 50px rgba(212, 175, 55, 1), 0 0 70px rgba(212, 175, 55, 0.5);
+        }
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .navbar-content {
+          padding: 0 1rem;
+        }
+        
+        .navbar-links {
+          gap: 1rem;
+        }
+        
+        .nav-link {
+          font-size: 0.9rem;
+          padding: 0.4rem 0.8rem;
+        }
+
+        .dune-title {
+          font-size: 5rem;
+        }
+        
+        .subtitle-line {
+          font-size: 1.2rem;
+        }
+        
+        .hero-description p {
+          font-size: 1rem;
+        }
+        
+        .hero-stats {
+          gap: 2rem;
+        }
+        
+        .stat-number {
+          font-size: 2rem;
+        }
+        
+        .hero-content {
+          padding: 0 1rem;
+        }
+
+        .about-title {
+          font-size: 2.5rem;
+        }
+        
+        .about-text {
+          font-size: 1rem;
+        }
+
+        .story-title {
+          font-size: 2.5rem;
+        }
+        
+        .story-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+        
+        .story-card {
+          padding: 1.5rem;
+        }
+
+        .creator-name {
+          font-size: 4rem;
+        }
+        
+        .credits-title {
+          font-size: 1.2rem;
+        }
+        
+        .credits-subtitle {
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .navbar-links {
+          gap: 0.5rem;
+        }
+        
+        .nav-link {
+          font-size: 0.8rem;
+          padding: 0.3rem 0.6rem;
+        }
+
+        .dune-title {
+          font-size: 3.5rem;
+        }
+        
+        .subtitle-line {
+          font-size: 1rem;
+        }
+        
+        .hero-description p {
+          font-size: 0.9rem;
+        }
+        
+        .hero-stats {
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        
+        .stat-number {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Video Background -->
+    <video class="video-background" autoplay loop muted playsinline>
+      <source src="/images/DuneBackground.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div class="overlay"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="navbar-links">
+          <button class="nav-link" onclick="scrollToSection('hero')">Home</button>
+          <button class="nav-link" onclick="scrollToSection('about')">About</button>
+          <button class="nav-link" onclick="scrollToSection('story')">Story</button>
+          <button class="nav-link" onclick="scrollToSection('credits')">Credits</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div id="hero" class="hero-section">
+      <div class="hero-content">
+        <h1 class="dune-title">DUNE</h1>
+        <div class="hero-subtitle">
+          <p class="subtitle-line">The greatest science fiction epic</p>
+          <p class="subtitle-line">A journey across the stars</p>
+          <p class="subtitle-line">Where destiny unfolds</p>
+        </div>
+        <div class="hero-description">
+          <p>
+            Enter the universe of Arrakis, where the spice flows, 
+            the sandworms rule the desert, and Paul Atreides discovers 
+            his destiny as the Kwisatz Haderach.
+          </p>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">1965</span>
+            <span class="stat-label">Original Novel</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">2021</span>
+            <span class="stat-label">Epic Film</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">Timeless Story</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+      <div class="about-content">
+        <h2 class="about-title">Why I Love Dune</h2>
+        <div class="about-text">
+          <p>
+            Dune is more than just a movie—it's a masterpiece of science fiction that transports you to a universe of political intrigue, 
+            mystical powers, and epic battles. The story of Paul Atreides and his journey on the desert planet Arrakis captivates me 
+            with its depth and complexity.
+          </p>
+          <p>
+            From the stunning visuals of the sand dunes to the intricate world-building, Dune represents the pinnacle of cinematic 
+            storytelling. The way Denis Villeneuve brought Frank Herbert's vision to life is nothing short of extraordinary.
+          </p>
+          <p>
+            This website is my tribute to this incredible universe—a place where the spice flows, the worms rule the desert, 
+            and destiny unfolds across the stars.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story" class="story-section">
+      <div class="story-content">
+        <h2 class="story-title">The Epic Tale of Dune</h2>
+        <div class="story-grid">
+          <div class="story-card">
+            <h3>The Spice</h3>
+            <p>
+              Melange, the most valuable substance in the universe, extends life, expands consciousness, 
+              and makes interstellar travel possible. It can only be found on the desert planet Arrakis.
+            </p>
+          </div>
+          <div class="story-card">
+            <h3>Paul Atreides</h3>
+            <p>
+              The young heir to House Atreides, Paul discovers his destiny as the Kwisatz Haderach—a being 
+              who can see across space and time, destined to change the universe forever.
+            </p>
+          </div>
+          <div class="story-card">
+            <h3>The Fremen</h3>
+            <p>
+              The native people of Arrakis, masters of the desert who have learned to survive in the harshest 
+              conditions and ride the mighty sandworms.
+            </p>
+          </div>
+          <div class="story-card">
+            <h3>The Desert</h3>
+            <p>
+              Arrakis—a world of endless sand dunes, where water is more precious than gold and the 
+              giant sandworms rule the deep desert.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Credits Section -->
+    <section id="credits" class="credits-section">
+      <div class="credits-content">
+        <div class="credits-text">
+          <h2 class="credits-title">Created by</h2>
+          <h1 class="creator-name">Willie Beukes</h1>
+          <p class="credits-subtitle">
+            A tribute to the greatest science fiction epic of our time
+          </p>
+        </div>
+        <div class="spice-particles">
+          <div class="particle" style="animation-delay: 0s; left: 10%; animation-duration: 3.2s;"></div>
+          <div class="particle" style="animation-delay: 0.1s; left: 20%; animation-duration: 4.1s;"></div>
+          <div class="particle" style="animation-delay: 0.2s; left: 30%; animation-duration: 3.8s;"></div>
+          <div class="particle" style="animation-delay: 0.3s; left: 40%; animation-duration: 4.5s;"></div>
+          <div class="particle" style="animation-delay: 0.4s; left: 50%; animation-duration: 3.1s;"></div>
+          <div class="particle" style="animation-delay: 0.5s; left: 60%; animation-duration: 4.3s;"></div>
+          <div class="particle" style="animation-delay: 0.6s; left: 70%; animation-duration: 3.7s;"></div>
+          <div class="particle" style="animation-delay: 0.7s; left: 80%; animation-duration: 4.2s;"></div>
+          <div class="particle" style="animation-delay: 0.8s; left: 90%; animation-duration: 3.9s;"></div>
+          <div class="particle" style="animation-delay: 0.9s; left: 15%; animation-duration: 4.4s;"></div>
+          <div class="particle" style="animation-delay: 1.0s; left: 25%; animation-duration: 3.6s;"></div>
+          <div class="particle" style="animation-delay: 1.1s; left: 35%; animation-duration: 4.0s;"></div>
+          <div class="particle" style="animation-delay: 1.2s; left: 45%; animation-duration: 3.4s;"></div>
+          <div class="particle" style="animation-delay: 1.3s; left: 55%; animation-duration: 4.6s;"></div>
+          <div class="particle" style="animation-delay: 1.4s; left: 65%; animation-duration: 3.3s;"></div>
+          <div class="particle" style="animation-delay: 1.5s; left: 75%; animation-duration: 4.7s;"></div>
+          <div class="particle" style="animation-delay: 1.6s; left: 85%; animation-duration: 3.5s;"></div>
+          <div class="particle" style="animation-delay: 1.7s; left: 95%; animation-duration: 4.8s;"></div>
+          <div class="particle" style="animation-delay: 1.8s; left: 5%; animation-duration: 3.9s;"></div>
+          <div class="particle" style="animation-delay: 1.9s; left: 12%; animation-duration: 4.1s;"></div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    </script>
+  </body>
+</html>

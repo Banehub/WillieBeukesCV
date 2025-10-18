@@ -21,8 +21,14 @@ const ProjectsAccordion = () => {
       url: "/natureflight.html",
       description: "Nature documentary showcase",
     },
+    {
+      id: 3,
+      name: "Dune",
+      url: "/dune.html",
+      description: "Epic science fiction universe showcase",
+    },
     // {
-    //   id: 3,
+    //   id: 4,
     //   name: "E-Commerce Store",
     //   url: "/ecomstore.html",
     //   description: "Full-featured online store",

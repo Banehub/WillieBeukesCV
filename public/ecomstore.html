@@ -1,12 +1,840 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Brighten - E-Commerce Store - Willie Beukes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - E-Commerce Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Mona Sans", sans-serif;
+            line-height: 1.6;
+            color: white;
+            background: #000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #282732;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-icon {
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #d9ecff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .nav-link:hover {
+            color: #839cb5;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #1c1c21;
+            border: 1px solid #282732;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 200px;
+            font-size: 0.9rem;
+            color: white;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .search-input::placeholder {
+            color: #839cb5;
+        }
+
+        .search-btn {
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #839cb5;
+            transition: color 0.2s ease;
+        }
+
+        .search-btn:hover {
+            color: #d9ecff;
+        }
+
+        .cart-btn {
+            position: relative;
+            padding: 0.5rem;
+            border: none;
+            background: #839cb5;
+            color: #000;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: "Mona Sans", sans-serif;
+            font-weight: 600;
+        }
+
+        .cart-btn:hover {
+            background: #d9ecff;
+            transform: translateY(-1px);
+        }
+
+        .cart-icon {
+            font-size: 1.2rem;
+        }
+
+        .cart-count {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 80px;
+        }
+
+        /* Hero Section */
+        .hero-banner {
+            background: linear-gradient(135deg, #1c1c21 0%, #282732 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid #282732;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .hero-content p {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Featured Products */
+        .featured-products {
+            padding: 6rem 2rem;
+            background: #000;
+        }
+
+        .featured-products h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: white;
+            font-family: "Mona Sans", sans-serif;
+            font-weight: 600;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: #1c1c21;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid #282732;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: #839cb5;
+        }
+
+        .product-image {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .product-emoji {
+            font-size: 4rem;
+            display: block;
+        }
+
+        .product-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 1rem;
+        }
+
+        .rating-text {
+            color: #d9ecff;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #839cb5;
+            margin-bottom: 1rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 2rem;
+            background: #0e0e10;
+            border-top: 1px solid #282732;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .feature p {
+            color: #d9ecff;
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #839cb5;
+            color: #000;
+            font-family: "Mona Sans", sans-serif;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: #d9ecff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 236, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: #282732;
+            color: #d9ecff;
+            width: 100%;
+            border: 1px solid #839cb5;
+            font-family: "Mona Sans", sans-serif;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
+            background: #839cb5;
+            color: #000;
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #0e0e10;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+            border-top: 1px solid #282732;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-section p {
+            color: #d9ecff;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: #1c1c21;
+            border: 1px solid #282732;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #839cb5;
+            border-color: #839cb5;
+            transform: translateY(-2px);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d9ecff;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .footer-links a:hover {
+            color: #839cb5;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #d9ecff;
+            font-size: 0.9rem;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .contact-icon {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #282732;
+            padding-top: 1.5rem;
+        }
+
+        .footer-bottom-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: #d9ecff;
+            font-size: 0.9rem;
+            margin: 0;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-bottom-links a {
+            color: #d9ecff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+            font-family: "Mona Sans", sans-serif;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #839cb5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+            }
+
+            .search-input {
+                width: 150px;
+            }
+
+            .navbar-brand h2 {
+                font-size: 1.25rem;
+            }
+
+            .hero-banner {
+                padding: 4rem 1rem;
+            }
+
+            .featured-products,
+            .features-section {
+                padding: 4rem 1rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-bottom-links {
+                justify-content: center;
+            }
+        }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/ecomstore-entry.jsx"></script>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <div class="navbar-brand">
+                <span class="brand-icon">🛒</span>
+                <h2>TechStore</h2>
+            </div>
+            
+            <div class="navbar-links">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#products" class="nav-link">Products</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search products..." class="search-input" />
+                    <button class="search-btn">🔍</button>
+                </div>
+                <button class="cart-btn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count">3</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <h1>Welcome to TechStore</h1>
+                <p>Discover the latest in technology and gadgets</p>
+                <button class="btn btn-primary">Shop Now</button>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="featured-products">
+            <div class="container">
+                <h2>Featured Products</h2>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <span class="product-emoji">🎧</span>
+                        </div>
+                        <div class="product-info">
+                            <h3>Wireless Headphones</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">(124)</span>
+                            </div>
+                            <div class="product-price">$99.99</div>
+                            <button class="btn btn-secondary">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">
+                            <span class="product-emoji">⌚</span>
+                        </div>
+                        <div class="product-info">
+                            <h3>Smart Watch</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">(89)</span>
+                            </div>
+                            <div class="product-price">$199.99</div>
+                            <button class="btn btn-secondary">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">
+                            <span class="product-emoji">🔊</span>
+                        </div>
+                        <div class="product-info">
+                            <h3>Bluetooth Speaker</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">(156)</span>
+                            </div>
+                            <div class="product-price">$79.99</div>
+                            <button class="btn btn-secondary">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">
+                            <span class="product-emoji">📱</span>
+                        </div>
+                        <div class="product-info">
+                            <h3>Phone Case</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="rating-text">(203)</span>
+                            </div>
+                            <div class="product-price">$29.99</div>
+                            <button class="btn btn-secondary">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature">
+                        <div class="feature-icon">🚚</div>
+                        <h3>Free Shipping</h3>
+                        <p>On orders over $50</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure Payment</h3>
+                        <p>100% secure checkout</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">↩️</div>
+                        <h3>Easy Returns</h3>
+                        <p>30-day return policy</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">💬</div>
+                        <h3>24/7 Support</h3>
+                        <p>Always here to help</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <span class="brand-icon">🛒</span>
+                        <h3>TechStore</h3>
+                    </div>
+                    <p>Your one-stop shop for the latest technology and gadgets. Quality products at unbeatable prices.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">🐦</a>
+                        <a href="#" class="social-link">📷</a>
+                        <a href="#" class="social-link">💼</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            <span>123 Tech Street, Digital City, DC 12345</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            <span>(555) 123-4567</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📧</span>
+                            <span>info@techstore.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2024 TechStore. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple demo functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add to cart functionality
+            const addToCartBtns = document.querySelectorAll('.btn-secondary');
+            addToCartBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cartCount = document.querySelector('.cart-count');
+                    let count = parseInt(cartCount.textContent);
+                    cartCount.textContent = count + 1;
+                    
+                    // Simple animation
+                    btn.textContent = 'Added!';
+                    btn.style.background = '#059669';
+                    setTimeout(() => {
+                        btn.textContent = 'Add to Cart';
+                        btn.style.background = '#e2e8f0';
+                    }, 1000);
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            const searchBtn = document.querySelector('.search-btn');
+            
+            searchBtn.addEventListener('click', function() {
+                const query = searchInput.value;
+                if (query.trim()) {
+                    alert(`Searching for: ${query}`);
+                }
+            });
+
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBtn.click();
+                }
+            });
+
+            // Cart button functionality
+            const cartBtn = document.querySelector('.cart-btn');
+            cartBtn.addEventListener('click', function() {
+                alert('Cart functionality would open here!');
+            });
+        });
+    </script>
   </body>
 </html>
